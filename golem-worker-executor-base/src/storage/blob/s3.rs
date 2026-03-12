@@ -51,7 +51,13 @@ impl S3BlobStorage {
         }
 
         if config.use_minio_credentials {
-            let creds = Credentials::new("minioadmin", "minioadmin", None, None, "test");
+            let creds = Credentials::new(
+                config.access_key_id,
+                config.secret_access_key,
+                None,
+                None,
+                config.provider_name
+            );
             config_builder = config_builder.credentials_provider(creds);
         }
 

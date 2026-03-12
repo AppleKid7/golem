@@ -284,6 +284,9 @@ pub struct S3BlobStorageConfig {
     pub oplog_payload_bucket: String,
     pub compressed_oplog_buckets: Vec<String>,
     pub use_minio_credentials: bool,
+    pub access_key_id: String,
+    pub secret_access_key: String,
+    pub provider_name: String
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

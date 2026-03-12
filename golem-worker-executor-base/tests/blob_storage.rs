@@ -515,6 +515,9 @@ pub(crate) async fn s3() -> impl GetBlobStorage {
         object_prefix: "".to_string(),
         aws_endpoint_url: Some(format!("http://127.0.0.1:{host_port}")),
         use_minio_credentials: true,
+        access_key_id: "minioadmin",
+        secret_access_key: "minioadmin",
+        provider_name: "test",
         ..std::default::Default::default()
     };
     create_buckets(host_port, &config).await;
@@ -535,6 +538,9 @@ pub(crate) async fn s3_prefixed() -> impl GetBlobStorage {
         object_prefix: "test-prefix".to_string(),
         aws_endpoint_url: Some(format!("http://127.0.0.1:{host_port}")),
         use_minio_credentials: true,
+        access_key_id: "minioadmin",
+        secret_access_key: "minioadmin",
+        provider_name: "test",
         ..std::default::Default::default()
     };
     create_buckets(host_port, &config).await;
@@ -547,7 +553,13 @@ pub(crate) async fn s3_prefixed() -> impl GetBlobStorage {
 async fn create_buckets(host_port: u16, config: &S3BlobStorageConfig) {
     let endpoint_uri = format!("http://127.0.0.1:{host_port}");
     let region_provider = RegionProviderChain::default_provider().or_else("us-east-1");
-    let creds = Credentials::new("minioadmin", "minioadmin", None, None, "test");
+    let creds = Credentials::new(
+        config.access_key_id,
+        config.secret_access_key,
+        None,
+        None,
+        config.provider_name
+    );
     let sdk_config = aws_config::defaults(BehaviorVersion::latest())
         .region(region_provider)
         .endpoint_url(endpoint_uri)
